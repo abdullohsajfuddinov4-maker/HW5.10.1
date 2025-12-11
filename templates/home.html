@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hoem</title>
+</head>
+<body>
+{% for i in product %}
+<a href="{% url 'detail' i.pk %}"> {{ i.name }} - {{ i.make }} - {{ i.create_at }}</a>
+{% endfor %}
+</body>
+</html>
