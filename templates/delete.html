@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удаление товара</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+        }
+        h1 {
+            color: #e74c3c;
+            margin-bottom: 30px;
+            font-size: 1.9rem;
+        }
+        .product-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+        .image {
+            margin: 30px 0;
+        }
+        .image img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 14px 36px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 130px;
+        }
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+        }
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Вы уверены, что хотите удалить товар?</h1>
+
+    <div class="product-name">«{{ object.name }}»</div>
+
+    {% if object.image %}
+        <div class="image">
+            <img src="{{ object.image.url }}" alt="{{ object.name }}">
+        </div>
+    {% endif %}
+
+    <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <div class="buttons">
+            <button type="submit" class="btn btn-delete">Ha</button>
+            <a href="{% url 'home' %}" class="btn btn-cancel">Yoq</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

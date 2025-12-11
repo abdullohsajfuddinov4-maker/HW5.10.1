@@ -1,12 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Hoem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товары</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .product-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+        }
+        .product-card h2 a {
+            text-decoration: none;
+            color: #2980b9;
+        }
+        .product-card h2 a:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
+        .product-info {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+        .create-btn {
+            display: block;
+            width: 220px;
+            margin: 50px auto 0;
+            padding: 16px;
+            background-color: #27ae60;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+        .create-btn:hover {
+            background-color: #219653;
+        }
+        .empty-message {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #95a5a6;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-{% for i in product %}
-<a href="{% url 'detail' i.pk %}"> {{ i.name }} - {{ i.make }} - {{ i.create_at }}</a>
-{% endfor %}
+    <div class="container">
+        <h1>Список товаров</h1>
+
+        {% if product %}
+            <div class="product-list">
+                {% for i in product %}
+                    <div class="product-card">
+                        <h2>
+                            <a href="{% url 'detail' i.pk %}">
+                                {{ i.name }}
+                            </a>
+                        </h2>
+                        <div class="product-info">
+                            <strong>Производитель:</strong> {{ i.make|default:"Не указан" }}<br>
+                            <strong>Добавлен:</strong>
+                            {% if i.create_at %}
+                                {{ i.create_at|date:"j F Y" }}
+                                {% if i.create_at.hour %}в {{ i.create_at|time:"H:i" }}{% endif %}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">Пока нет ни одного товара</p>
+        {% endif %}
+
+        <a href="{% url 'create' %}" class="create-btn">+ Добавить товар</a>
+    </div>
 </body>
 </html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if form.instance.pk %}
+            Редактировать товар
+        {% else %}
+            Добавить новый товар
+        {% endif %}
+    </title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 6px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .file-input {
+            padding: 10px 0;
+        }
+        .current-image {
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        button[type="submit"] {
+            background-color: #27ae60;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #219653;
+        }
+        .btn-cancel {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: #95a5a6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .btn-cancel:hover {
+            background-color: #7f8c8d;
+        }
+        .errorlist {
+            color: #e74c3c;
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 25px; }
+            .buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            {% if form.instance.pk %}
+                Редактировать «{{ form.instance.name }}»
+            {% else %}
+                Добавить новый товар
+            {% endif %}
+        </h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div>
+                    {{ field.label_tag }}
+
+                    {% if field.field.widget.input_type == 'file' and form.instance.pk and form.instance.image %}
+                        {% if field.value %}
+                            <div style="margin-bottom: 15px;">
+                                <p><strong>Текущее изображение:</strong></p>
+                                <img src="{{ form.instance.image.url }}" alt="Текущее изображение" class="current-image" style="max-height: 250px;">
+                            </div>
+                        {% endif %}
+                        <p style="color:#7f8c8d; font-size:0.9rem;">Загрузите новое изображение, чтобы заменить текущее:</p>
+                    {% endif %}
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <small style="color:#95a5a6;">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% if field.errors %}
+                        {{ field.errors }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="buttons">
+                <button type="submit">
+                    {% if form.instance.pk %}Сохранить изменения{% else %}Создать товар{% endif %}
+                </button>
+                <a href="{% url 'home' %}" class="btn-cancel">Отмена</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
